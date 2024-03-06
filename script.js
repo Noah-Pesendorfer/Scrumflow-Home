@@ -18,10 +18,6 @@ const auth = getAuth(app);
 
 let currentProject = null;
 
-function redirectToLogin() {
-    window.location.href = 'https://noah-pesendorfer.github.io/Login/';
-}
-
 // Authentifizierungsstatus beibehalten
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -29,7 +25,6 @@ onAuthStateChanged(auth, (user) => {
       loadTasksIntoHTML();
     } else {
       console.log("No user is signed in.");
-      redirectToLogin();
     }
 });
 
