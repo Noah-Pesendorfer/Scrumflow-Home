@@ -96,12 +96,6 @@ menuBar.addEventListener('click', function () {
 	sidebar.classList.toggle('hide');
 })
 
-window.addEventListener('resize', function () {
-	if(this.innerWidth > 576) {
-		searchForm.classList.remove('show');
-	}
-})
-
 const switchMode = document.getElementById('switch-mode');
 
 switchMode.addEventListener('change', function () {
