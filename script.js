@@ -25,6 +25,7 @@ onAuthStateChanged(auth, (user) => {
       loadProjectsIntoHTML();
       updateTotalTaskCount();
       updateTotalProjectCount();
+      updateDaysSinceRegistration();
     } else {
       console.log("No user is signed in.");
     }
@@ -111,6 +112,32 @@ function updateTotalProjectCount() {
             })
             .catch(error => {
                 console.error("Error loading projects: ", error);
+            });
+    } else {
+        console.log("No user signed in.");
+    }
+}
+
+function updateDaysSinceRegistration() {
+    const user = auth.currentUser;
+    if (user) {
+        // Annahme: Das Registrierungsdatum ist im Benutzerprofil unter 'registrationDate' gespeichert
+        const userRef = doc(db, "users", user.uid);
+        getDoc(userRef)
+            .then(docSnapshot => {
+                if (docSnapshot.exists()) {
+                    const userData = docSnapshot.data();
+                    const registrationDate = userData.registrationDate.toDate(); // Konvertiere Firestore Timestamp zu JavaScript Date
+                    const currentDate = new Date();
+                    const daysSinceRegistration = Math.floor((currentDate - registrationDate) / (1000 * 60 * 60 * 24));
+                    
+                    document.getElementById('days-since-registration').innerText = daysSinceRegistration;
+                } else {
+                    console.log("No user data found.");
+                }
+            })
+            .catch(error => {
+                console.error("Error getting user data: ", error);
             });
     } else {
         console.log("No user signed in.");
