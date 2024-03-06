@@ -16,6 +16,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+let currentProject = null;
+
 function redirectToLogin() {
     window.location.href = 'https://noah-pesendorfer.github.io/Login/';
 }
@@ -33,7 +35,8 @@ onAuthStateChanged(auth, (user) => {
 
 // Funktion zum Laden der Tasks aus Firestore und Anzeigen im Dashboard
 function loadTasksIntoHTML() {
-    const tasksRef = collection(db, "users", auth.currentUser.uid, "projects", currentProject, "tasks");
+    const user = auth.currentUser;
+    const tasksRef = collection(db, "users", user.uid, "projects", currentProject, "tasks");
     getDocs(tasksRef)
         .then(querySnapshot => {
             const tasks = [];
