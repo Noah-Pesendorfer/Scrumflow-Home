@@ -20,10 +20,10 @@ const auth = getAuth(app);
 
 // Authentifizierungsstatus beibehalten
 onAuthStateChanged(auth, (user) => {
-    console.log("Jetzt sama im onauthchanged");
     if (user) {
       console.log("User is signed in with UID:", user.uid);
       loadProjectsIntoHTML();
+      updateTotalTaskCount();
     } else {
       console.log("No user is signed in.");
     }
@@ -69,6 +69,31 @@ function updateProjectsDisplay(projects) {
         projectElement.innerHTML = `<p>${project.name}</p><i class='bx bx-dots-vertical-rounded' ></i>`; // 'name' sollte durch ein tatsächliches Attribut des Projektobjekts ersetzt werden, das den Namen oder Titel des Projekts enthält
         projectList.appendChild(projectElement);
     });
+}
+
+// Funktion zum Aktualisieren der Gesamtanzahl der Tasks
+function updateTotalTaskCount() {
+    const user = auth.currentUser;
+    if (user) {
+        const projectsRef = collection(db, "users", user.uid, "projects");
+        getDocs(projectsRef)
+            .then(async querySnapshot => {
+                let totalTaskCount = 0;
+                for (let doc of querySnapshot.docs) {
+                    const project = doc.id;
+                    const tasksRef = collection(db, "users", user.uid, "projects", project, "tasks");
+                    const tasksSnapshot = await getDocs(tasksRef);
+                    totalTaskCount += tasksSnapshot.docs.length;
+                }
+                // Aktualisiere die Anzahl der Tasks im Dashboard
+                document.getElementById('task-count').innerText = totalTaskCount;
+            })
+            .catch(error => {
+                console.error("Error loading tasks: ", error);
+            });
+    } else {
+        console.log("No user signed in.");
+    }
 }
 
 // SIDE MENU
