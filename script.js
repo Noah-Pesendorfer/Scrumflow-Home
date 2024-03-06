@@ -24,6 +24,7 @@ onAuthStateChanged(auth, (user) => {
       console.log("User is signed in with UID:", user.uid);
       loadProjectsIntoHTML();
       updateTotalTaskCount();
+      updateTotalProjectCount();
     } else {
       console.log("No user is signed in.");
     }
@@ -90,6 +91,26 @@ function updateTotalTaskCount() {
             })
             .catch(error => {
                 console.error("Error loading tasks: ", error);
+            });
+    } else {
+        console.log("No user signed in.");
+    }
+}
+
+// Funktion zum Aktualisieren der Gesamtanzahl der Projekte
+function updateTotalProjectCount() {
+    const user = auth.currentUser;
+    if (user) {
+        const projectsRef = collection(db, "users", user.uid, "projects");
+        getDocs(projectsRef)
+            .then(querySnapshot => {
+                // Die Anzahl der Dokumente in der Abfrage entspricht der Anzahl der Projekte
+                const projectCount = querySnapshot.docs.length;
+                // Aktualisiere die Anzahl der Projekte im Dashboard
+                document.getElementById('project-count').innerText = projectCount;
+            })
+            .catch(error => {
+                console.error("Error loading projects: ", error);
             });
     } else {
         console.log("No user signed in.");
