@@ -20,6 +20,7 @@ let currentProject = null;
 
 // Authentifizierungsstatus beibehalten
 onAuthStateChanged(auth, (user) => {
+    console.log("Jetzt sama im onauthchanged");
     if (user) {
       console.log("User is signed in with UID:", user.uid);
       loadTasksIntoHTML();
@@ -51,7 +52,6 @@ function loadTasksIntoHTML() {
     } else {
       // Optional: Handler, wenn kein Benutzer angemeldet ist. Zum Beispiel Weiterleitung zur Login-Seite.
       console.log("No user signed in.");
-      redirectToLogin(); // Diese Funktion muss definiert sein.
     }
   }  
 
