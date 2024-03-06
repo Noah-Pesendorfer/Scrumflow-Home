@@ -157,7 +157,7 @@ function loadCurrentProjects() {
                     const project = doc.data();
                     if (project.status !== 'completed') { // Filter nicht abgeschlossene Projekte
                         const row = `<tr>
-                                        <td><p>${project.name}</p></td>
+                                        <td><p>${project.title}</p></td>
                                         <td>${doc.id}</td> 
                                         <td><span class="status ${project.status}">${project.status}</span></td>
                                      </tr>`;
