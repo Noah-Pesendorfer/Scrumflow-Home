@@ -36,22 +36,29 @@ onAuthStateChanged(auth, (user) => {
 // Funktion zum Laden der Tasks aus Firestore und Anzeigen im Dashboard
 function loadTasksIntoHTML() {
     const user = auth.currentUser;
-    const tasksRef = collection(db, "users", user.uid, "projects", currentProject, "tasks");
-    getDocs(tasksRef)
+    if (user) {
+      // Stellen Sie sicher, dass 'currentProject' irgendwo gesetzt wird, bevor diese Funktion aufgerufen wird.
+      const tasksRef = collection(db, "users", user.uid, "projects", currentProject, "tasks");
+      getDocs(tasksRef)
         .then(querySnapshot => {
-            const tasks = [];
-            querySnapshot.forEach(doc => {
-                const taskData = doc.data();
-                const task = {id: doc.id, ...taskData};
-                tasks.push(task);
-            });
-            updateTasksDisplay(tasks); // Update UI with tasks
-            updateTaskCount(tasks.length); // Update task count
+          const tasks = [];
+          querySnapshot.forEach(doc => {
+            const taskData = doc.data();
+            const task = {id: doc.id, ...taskData};
+            tasks.push(task);
+          });
+          updateTasksDisplay(tasks); // Update UI with tasks
+          updateTaskCount(tasks.length); // Update task count
         })
         .catch(error => {
-            console.error("Error loading tasks: ", error);
+          console.error("Error loading tasks: ", error);
         });
-}
+    } else {
+      // Optional: Handler, wenn kein Benutzer angemeldet ist. Zum Beispiel Weiterleitung zur Login-Seite.
+      console.log("No user signed in.");
+      redirectToLogin(); // Diese Funktion muss definiert sein.
+    }
+  }  
 
 // Funktion zum Aktualisieren der Task-Anzahl im Dashboard
 function updateTaskCount(count) {
