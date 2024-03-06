@@ -16,60 +16,58 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-let currentProject = null;
+//let currentProject = null;
 
 // Authentifizierungsstatus beibehalten
 onAuthStateChanged(auth, (user) => {
     console.log("Jetzt sama im onauthchanged");
     if (user) {
       console.log("User is signed in with UID:", user.uid);
-      loadTasksIntoHTML();
+      loadProjectsIntoHTML();
     } else {
       console.log("No user is signed in.");
     }
 });
 
-// Funktion zum Laden der Tasks aus Firestore und Anzeigen im Dashboard
-function loadTasksIntoHTML() {
+// Funktion zum Laden der Projekte aus Firestore und Anzeigen im Dashboard
+function loadProjectsIntoHTML() {
     const user = auth.currentUser;
     if (user) {
-      // Stellen Sie sicher, dass 'currentProject' irgendwo gesetzt wird, bevor diese Funktion aufgerufen wird.
-      const tasksRef = collection(db, "users", user.uid, "projects", currentProject, "tasks");
-      getDocs(tasksRef)
+      // Referenz zur 'projects'-Sammlung für den aktuellen Benutzer
+      const projectsRef = collection(db, "users", user.uid, "projects");
+      getDocs(projectsRef)
         .then(querySnapshot => {
-          const tasks = [];
+          const projects = [];
           querySnapshot.forEach(doc => {
-            const taskData = doc.data();
-            const task = {id: doc.id, ...taskData};
-            tasks.push(task);
+            const projectData = doc.data();
+            const project = {id: doc.id, ...projectData};
+            projects.push(project);
           });
-          updateTasksDisplay(tasks); // Update UI with tasks
-          updateTaskCount(tasks.length); // Update task count
+          updateProjectsDisplay(projects); // Update UI with projects
+          updateProjectCount(projects.length); // Update project count
         })
         .catch(error => {
-          console.error("Error loading tasks: ", error);
+          console.error("Error loading projects: ", error);
         });
     } else {
-      // Optional: Handler, wenn kein Benutzer angemeldet ist. Zum Beispiel Weiterleitung zur Login-Seite.
       console.log("No user signed in.");
     }
-  }  
-
-// Funktion zum Aktualisieren der Task-Anzahl im Dashboard
-function updateTaskCount(count) {
-    // Zugriff auf das Element, das die Anzahl der Tasks anzeigt, und Aktualisierung seines Inhalts
-    document.getElementById('task-count').innerText = count;
 }
 
-// Funktion zum Aktualisieren der Task-Liste im UI
-function updateTasksDisplay(tasks) {
-    const todoList = document.querySelector('.todo-list');
-    todoList.innerHTML = ''; // Clear existing tasks
-    tasks.forEach(task => {
-        const taskElement = document.createElement('li');
-        taskElement.className = task.completed ? 'completed' : 'not-completed';
-        taskElement.innerHTML = `<p>${task.title}</p><i class='bx bx-dots-vertical-rounded' ></i>`;
-        todoList.appendChild(taskElement);
+// Funktion zum Aktualisieren der Projektanzahl im Dashboard
+function updateProjectCount(count) {
+    // Zugriff auf das Element, das die Anzahl der Projekte anzeigt, und Aktualisierung seines Inhalts
+    document.getElementById('project-count').innerText = count; // Stelle sicher, dass ein Element mit der ID 'project-count' im HTML existiert
+}
+
+// Funktion zum Aktualisieren der Projekte-Liste im UI
+function updateProjectsDisplay(projects) {
+    const projectList = document.querySelector('.project-list'); // Stelle sicher, dass ein Container mit der Klasse 'project-list' im HTML existiert
+    projectList.innerHTML = ''; // Clear existing projects
+    projects.forEach(project => {
+        const projectElement = document.createElement('li');
+        projectElement.innerHTML = `<p>${project.name}</p><i class='bx bx-dots-vertical-rounded' ></i>`; // 'name' sollte durch ein tatsächliches Attribut des Projektobjekts ersetzt werden, das den Namen oder Titel des Projekts enthält
+        projectList.appendChild(projectElement);
     });
 }
 
