@@ -16,14 +16,18 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+function redirectToLogin() {
+    window.location.href = 'https://noah-pesendorfer.github.io/Login/';
+}
+
 // Authentifizierungsstatus beibehalten
 onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("User is signed in with UID:", user.uid);
-      loadUserEvents();
+      loadTasksIntoHTML();
     } else {
       console.log("No user is signed in.");
-      //redirectToLogin();
+      redirectToLogin();
     }
 });
 
@@ -46,7 +50,6 @@ function loadTasksIntoHTML() {
         });
 }
 
-// Funktion zum Aktualisieren der Task-Anzahl im Dashboard
 // Funktion zum Aktualisieren der Task-Anzahl im Dashboard
 function updateTaskCount(count) {
     // Zugriff auf das Element, das die Anzahl der Tasks anzeigt, und Aktualisierung seines Inhalts
