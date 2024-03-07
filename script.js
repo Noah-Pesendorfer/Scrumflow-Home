@@ -1,6 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, collection, getDoc, getDocs, addDoc, deleteDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyDZJTH0Znyi13etPM6Ag5M-lQ_WeqXOIsU",
@@ -154,6 +157,34 @@ function loadCompletedProjects() {
         console.log("No user signed in.");
     }
 }
+
+async function downloadDashboardAsPDF() {
+    // Prüfe, ob jsPDF und html2canvas verfügbar sind
+    if (typeof jsPDF === 'undefined' || typeof html2canvas === 'undefined') {
+        console.error('jsPDF and html2canvas must be loaded to download the dashboard as PDF.');
+        return;
+    }
+
+    const element = document.body; // Oder ein spezifischeres Element, wenn du nicht den ganzen Body exportieren möchtest
+    const canvas = await html2canvas(element);
+    const imgData = canvas.toDataURL('image/png');
+    
+    const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: [canvas.width, canvas.height]
+    });
+
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    pdf.save('dashboard.pdf');
+}
+
+// Füge einen Event Listener zum Download-Button hinzu
+document.querySelector('.btn-download').addEventListener('click', (e) => {
+    console.log("addEventListener wird aufgerufen");
+    e.preventDefault(); // Verhindere das Standardverhalten des Links
+    downloadDashboardAsPDF();
+});
 
 // SIDE MENU
 
