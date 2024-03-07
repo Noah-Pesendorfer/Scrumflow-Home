@@ -139,7 +139,7 @@ function loadCompletedProjects() {
                 ul.innerHTML = ''; // Clear existing content
                 querySnapshot.forEach(doc => {
                     const project = doc.data();
-                    if (project.status !== 'completed') { // Nur abgeschlossene Projekte
+                    if (project.status === 'completed') { // Nur abgeschlossene Projekte
                         const li = document.createElement('li');
                         li.className = 'completed';
                         li.innerHTML = `<p>${project.title} - ${doc.id}</p><i class='bx bx-dots-vertical-rounded'></i>`;
