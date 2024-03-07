@@ -156,17 +156,17 @@ function loadCompletedProjects() {
 }
 
 async function downloadDashboardAsPDF() {
-    // Prüfe, ob jsPDF und html2canvas verfügbar sind
-    if (typeof jsPDF === 'undefined' || typeof html2canvas === 'undefined') {
+    // Entferne die Überprüfung oder prüfe direkt auf dem window-Objekt
+    if (typeof window.jsPDF === 'undefined' || typeof window.html2canvas === 'undefined') {
         console.error('jsPDF and html2canvas must be loaded to download the dashboard as PDF.');
         return;
     }
 
     const element = document.body; // Oder ein spezifischeres Element, wenn du nicht den ganzen Body exportieren möchtest
-    const canvas = await html2canvas(element);
+    const canvas = await window.html2canvas(element);
     const imgData = canvas.toDataURL('image/png');
     
-    const pdf = new jsPDF({
+    const pdf = new window.jsPDF({
         orientation: 'portrait',
         unit: 'pt',
         format: [canvas.width, canvas.height]
