@@ -169,7 +169,7 @@ async function downloadDashboardAsPDF() {
     const pdfHeight = canvas.height;
     
     // Erstelle ein jsPDF-Dokument im passenden Format
-    const pdf = new jsPDF({
+    const pdf = new window.jspdf.jsPDF({
         orientation: 'portrait',
         unit: 'px',
         format: [pdfWidth, pdfHeight]
