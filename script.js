@@ -156,12 +156,12 @@ function loadCompletedProjects() {
 }
 
 async function downloadDashboardAsPDF() {
-
-    const element = document.body; // Oder ein spezifischeres Element, wenn du nicht den ganzen Body exportieren möchtest
-    const canvas = await window.html2canvas(element);
+    const element = document.body;
+    const canvas = await html2canvas(element);
     const imgData = canvas.toDataURL('image/png');
-    
-    const pdf = new window.jsPDF({
+
+    // Prüfe, ob die Bibliothek unter einem anderen Pfad verfügbar ist
+    const pdf = new window.jspdf.jsPDF({
         orientation: 'portrait',
         unit: 'pt',
         format: [canvas.width, canvas.height]
