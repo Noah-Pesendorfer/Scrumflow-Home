@@ -156,18 +156,29 @@ function loadCompletedProjects() {
 }
 
 async function downloadDashboardAsPDF() {
-    const element = document.body;
-    const canvas = await html2canvas(element);
+    const element = document.querySelector('main'); // Wähle das main Element für die PDF-Erstellung
+    const canvas = await html2canvas(element, {
+        scale: 1, // Du kannst den Scale anpassen, um die Qualität zu verbessern, falls nötig
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight
+    });
     const imgData = canvas.toDataURL('image/png');
-
-    // Prüfe, ob die Bibliothek unter einem anderen Pfad verfügbar ist
-    const pdf = new window.jspdf.jsPDF({
+    
+    // Berechne die Breite und Höhe des PDFs basierend auf der des Canvas
+    const pdfWidth = canvas.width;
+    const pdfHeight = canvas.height;
+    
+    // Erstelle ein jsPDF-Dokument im passenden Format
+    const pdf = new jsPDF({
         orientation: 'portrait',
-        unit: 'pt',
-        format: [canvas.width, canvas.height]
+        unit: 'px',
+        format: [pdfWidth, pdfHeight]
     });
 
-    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    // Füge das gerenderte Bild des Canvas zum jsPDF-Dokument hinzu
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    
+    // Speichere das PDF
     pdf.save('dashboard.pdf');
 }
 
