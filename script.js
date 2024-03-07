@@ -175,7 +175,7 @@ async function downloadDashboardAsPDF() {
     const pdf = new window.jspdf.jsPDF({
         orientation: 'portrait',
         unit: 'px',
-        format: [pdfWidth, pdfHeight]
+        format: [canvas.width, canvas.height]
     });
 
     // Füge das gerenderte Bild des Canvas zum jsPDF-Dokument hinzu
