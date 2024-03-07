@@ -170,19 +170,20 @@ async function downloadDashboardAsPDF() {
     const pdfHeight = canvas.height;
 
     console.log(pdfHeight, pdfHeight);
+    console.log("Jooo" , canvas.width, canvas.height);
     
     // Erstelle ein jsPDF-Dokument im passenden Format
     const pdf = new window.jspdf.jsPDF({
-        orientation: 'portrait',
+        orientation: 'landscape', // Wenn die Breite größer als die Höhe ist
         unit: 'px',
         format: [canvas.width, canvas.height]
     });
-
-    // Füge das gerenderte Bild des Canvas zum jsPDF-Dokument hinzu
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
     
-    // Speichere das PDF
+    console.log(pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+    
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
     pdf.save('dashboard.pdf');
+    
 }
 
 // Füge einen Event Listener zum Download-Button hinzu
