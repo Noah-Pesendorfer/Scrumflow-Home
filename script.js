@@ -162,6 +162,7 @@ async function downloadDashboardAsPDF() {
         windowWidth: element.scrollWidth,
         windowHeight: element.scrollHeight
     });
+    console.log(canvas.width, canvas.height);
     const imgData = canvas.toDataURL('image/png');
     
     // Berechne die Breite und Höhe des PDFs basierend auf der des Canvas

@@ -32,7 +32,7 @@ li {
 }
 
 html {
-	/*overflow-x: hidden; */
+	overflow-x: hidden;
 }
 
 body.dark {
@@ -43,7 +43,7 @@ body.dark {
 
 body {
 	background: var(--grey);
-	/*overflow-x: hidden;*/
+	overflow-x: hidden;
 }
 
 
@@ -61,7 +61,7 @@ body {
 	z-index: 2000;
 	font-family: var(--lato);
 	transition: .3s ease;
-	/*overflow-x: hidden;*/
+	overflow-x: hidden;
 	scrollbar-width: none;
 }
 #sidebar::--webkit-scrollbar {
@@ -137,7 +137,7 @@ body {
 	font-size: 16px;
 	color: var(--dark);
 	white-space: nowrap;
-	/*overflow-x: hidden;*/
+	overflow-x: hidden;
 }
 #sidebar .side-menu.top li.active a {
 	color: var(--blue);
