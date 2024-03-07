@@ -24,6 +24,7 @@ onAuthStateChanged(auth, (user) => {
       updateTotalProjectCount();
       updateDaysSinceRegistration();
       loadCurrentProjects();
+      loadCompletedProjects();
     } else {
       console.log("No user is signed in.");
     }
@@ -122,6 +123,32 @@ function loadCurrentProjects() {
             })
             .catch(error => {
                 console.error("Error loading current projects: ", error);
+            });
+    } else {
+        console.log("No user signed in.");
+    }
+}
+
+function loadCompletedProjects() {
+    const user = auth.currentUser;
+    if (user) {
+        const projectsRef = collection(db, "users", user.uid, "projects");
+        getDocs(projectsRef)
+            .then(querySnapshot => {
+                const ul = document.querySelector('.todo-list');
+                ul.innerHTML = ''; // Clear existing content
+                querySnapshot.forEach(doc => {
+                    const project = doc.data();
+                    if (project.status === 'completed') { // Nur abgeschlossene Projekte
+                        const li = document.createElement('li');
+                        li.className = 'completed';
+                        li.innerHTML = `<p>${project.name} - ${doc.id}</p><i class='bx bx-dots-vertical-rounded'></i>`;
+                        ul.appendChild(li);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Error loading completed projects: ", error);
             });
     } else {
         console.log("No user signed in.");
