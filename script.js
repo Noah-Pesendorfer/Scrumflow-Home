@@ -142,7 +142,7 @@ function loadCompletedProjects() {
                     if (project.status === 'completed') { // Nur abgeschlossene Projekte
                         const li = document.createElement('li');
                         li.className = 'completed';
-                        li.innerHTML = `<p>${project.name} - ${doc.id}</p><i class='bx bx-dots-vertical-rounded'></i>`;
+                        li.innerHTML = `<p>${project.title} - ${doc.id}</p><i class='bx bx-dots-vertical-rounded'></i>`;
                         ul.appendChild(li);
                     }
                 });
