@@ -159,8 +159,8 @@ async function downloadDashboardAsPDF() {
     const element = document.querySelector('main'); // Wähle das main Element für die PDF-Erstellung
     const canvas = await html2canvas(element, {
         scale: 1, // Du kannst den Scale anpassen, um die Qualität zu verbessern, falls nötig
-        windowWidth: 1400,
-        windowHeight: 700
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight
     });
     console.log(canvas.width, canvas.height);
     const imgData = canvas.toDataURL('image/png');
@@ -168,6 +168,8 @@ async function downloadDashboardAsPDF() {
     // Berechne die Breite und Höhe des PDFs basierend auf der des Canvas
     const pdfWidth = canvas.width;
     const pdfHeight = canvas.height;
+
+    console.log(pdfHeight, pdfHeight);
     
     // Erstelle ein jsPDF-Dokument im passenden Format
     const pdf = new window.jspdf.jsPDF({
