@@ -156,11 +156,6 @@ function loadCompletedProjects() {
 }
 
 async function downloadDashboardAsPDF() {
-    // Entferne die Überprüfung oder prüfe direkt auf dem window-Objekt
-    if (typeof window.jsPDF === 'undefined' || typeof window.html2canvas === 'undefined') {
-        console.error('jsPDF and html2canvas must be loaded to download the dashboard as PDF.');
-        return;
-    }
 
     const element = document.body; // Oder ein spezifischeres Element, wenn du nicht den ganzen Body exportieren möchtest
     const canvas = await window.html2canvas(element);
