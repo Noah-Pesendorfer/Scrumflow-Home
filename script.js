@@ -16,13 +16,10 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-//let currentProject = null;
-
 // Authentifizierungsstatus beibehalten
 onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("User is signed in with UID:", user.uid);
-      loadProjectsIntoHTML();
       updateTotalTaskCount();
       updateTotalProjectCount();
       updateDaysSinceRegistration();
@@ -31,48 +28,6 @@ onAuthStateChanged(auth, (user) => {
       console.log("No user is signed in.");
     }
 });
-
-// Funktion zum Laden der Projekte aus Firestore und Anzeigen im Dashboard
-function loadProjectsIntoHTML() {
-    const user = auth.currentUser;
-    if (user) {
-      // Referenz zur 'projects'-Sammlung für den aktuellen Benutzer
-      const projectsRef = collection(db, "users", user.uid, "projects");
-      getDocs(projectsRef)
-        .then(querySnapshot => {
-          const projects = [];
-          querySnapshot.forEach(doc => {
-            const projectData = doc.data();
-            const project = {id: doc.id, ...projectData};
-            projects.push(project);
-          });
-          updateProjectsDisplay(projects); // Update UI with projects
-          updateProjectCount(projects.length); // Update project count
-        })
-        .catch(error => {
-          console.error("Error loading projects: ", error);
-        });
-    } else {
-      console.log("No user signed in.");
-    }
-}
-
-// Funktion zum Aktualisieren der Projektanzahl im Dashboard
-function updateProjectCount(count) {
-    // Zugriff auf das Element, das die Anzahl der Projekte anzeigt, und Aktualisierung seines Inhalts
-    document.getElementById('project-count').innerText = count; // Stelle sicher, dass ein Element mit der ID 'project-count' im HTML existiert
-}
-
-// Funktion zum Aktualisieren der Projekte-Liste im UI
-function updateProjectsDisplay(projects) {
-    const projectList = document.querySelector('.project-list'); // Stelle sicher, dass ein Container mit der Klasse 'project-list' im HTML existiert
-    projectList.innerHTML = ''; // Clear existing projects
-    projects.forEach(project => {
-        const projectElement = document.createElement('li');
-        projectElement.innerHTML = `<p>${project.name}</p><i class='bx bx-dots-vertical-rounded' ></i>`; // 'name' sollte durch ein tatsächliches Attribut des Projektobjekts ersetzt werden, das den Namen oder Titel des Projekts enthält
-        projectList.appendChild(projectElement);
-    });
-}
 
 // Funktion zum Aktualisieren der Gesamtanzahl der Tasks
 function updateTotalTaskCount() {
