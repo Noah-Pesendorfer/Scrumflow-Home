@@ -53,10 +53,6 @@ body {
 	left: 280px;
 	transition: .3s ease;
 }
-#sidebar.hide ~ #content {
-	width: calc(100% - 60px);
-	left: 60px;
-}
 
 /* MAIN */
 #content main {
@@ -107,9 +103,6 @@ body {
 	grid-gap: 10px;
 	font-weight: 500;
 }
-
-
-
 
 #content main .box-info {
 	display: grid;
