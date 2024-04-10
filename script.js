@@ -115,7 +115,6 @@ function loadCurrentProjects() {
                         const row = `<tr>
                                         <td><p>${project.title}</p></td>
                                         <td>${doc.id}</td> 
-                                        <td><span class="status ${project.status}">${project.status}</span></td>
                                      </tr>`;
                         tbody.innerHTML += row;
                     }
